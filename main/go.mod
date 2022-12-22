@@ -6,6 +6,7 @@ replace strongwill.com/utils => ../utils
 
 require (
 	github.com/gin-gonic/gin v1.8.1
+	strongwill.com/db v0.0.0-00010101000000-000000000000
 	strongwill.com/utils v0.0.0-00010101000000-000000000000
 )
 
@@ -14,6 +15,7 @@ require (
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
+	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/goccy/go-json v0.9.7 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
@@ -29,3 +31,5 @@ require (
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
+
+replace strongwill.com/db => ../db
