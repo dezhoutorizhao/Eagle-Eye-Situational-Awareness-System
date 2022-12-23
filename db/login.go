@@ -1,10 +1,11 @@
 package db
 
 import (
+	_ "context"
+	_ "database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	"utils"
 )
 
 type User struct {
@@ -14,19 +15,25 @@ type User struct {
 	Email string
 }
 
+
 var (
 	id int
 	username string
 	password string
 	email string
+	login_status int
 )
+
 
 func (user *User) GetUserByUsername(un string) (*User,error) {
 	// sql语句
 	sqlStr := "SELECT id, username, password, email FROM user_login.users WHERE username = ?";
 	// QueryRow执行一次查询，并期望返回最多一行结果，即row
 	fmt.Println(sqlStr)
-	rows, err := utils.Db.Query(sqlStr, un)
+	if Db == nil {
+		return nil, fmt.Errorf("Db is nil")
+	}
+	rows, err := Db.Query(sqlStr, un)
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +61,8 @@ func (user *User) GetUserByUsername(un string) (*User,error) {
 	return nil, nil
 }
 
-func checkLogin(username string, password string) int {
+
+func checkLogin(username string, password string,c *gin.Context) int {
 	// user是从前端接收的数据
 	user := &User{}
 	// u是根据username查询到的数据
@@ -71,6 +79,10 @@ func checkLogin(username string, password string) int {
 	}
 	if u.Password == password {
 		fmt.Println("login successfully")
+		//log_status := If_Success{"yes"}
+		//c.JSON(200,log_status)
+		login_status = 200
+		c.String(200,"success")
 		return 200 // OK
 	} else {
 		fmt.Println("401")
@@ -82,7 +94,10 @@ func Login(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 
-	statusCode := checkLogin(username, password)
+	statusCode := checkLogin(username, password,nil)
+
+	fmt.Println(statusCode)
+
 	if statusCode == 200 {
 		// Login successful, redirect to dashboard or set cookies
 	} else if statusCode == 401 {
@@ -90,4 +105,5 @@ func Login(c *gin.Context) {
 	} else {
 		// Other error, display appropriate message
 	}
+
 }
