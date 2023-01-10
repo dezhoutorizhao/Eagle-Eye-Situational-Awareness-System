@@ -28,19 +28,24 @@ func AddUser_front(add_c *gin.Context) {
 	re_number = add_c.PostForm("school_id")
 	fmt.Println(re_username, re_password, re_email)
 	if len(re_username) == 0 || len(re_password) == 0 || len(re_email) == 0 || len(re_number) == 0 {
-		add_c.String(200, "error")
+		add_c.String(200, "error\n")
+		return
 	}
 	if len(re_username) == 0 {
-		add_c.String(200, "username is null")
+		add_c.String(200, "username is null\n")
+		return
 	}
 	if len(re_password) == 0 {
-		add_c.String(200, "password is null")
+		add_c.String(200, "password is null\n")
+		return
 	}
 	if len(re_email) == 0 {
-		add_c.String(200, "email is null")
+		add_c.String(200, "email is null\n")
+		return
 	}
 	if len(re_number) == 0 {
-		add_c.String(200, "school_id is null")
+		add_c.String(200, "school_id is null\n")
+		return
 	}
 	// re代表register
 	u := &Re_User{re_username, re_password, re_email, re_number}

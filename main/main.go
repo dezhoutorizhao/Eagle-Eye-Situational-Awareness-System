@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"runtime"
 	"strongwill.com/db"
+	"strongwill.com/detection"
 	"strongwill.com/utils"
 )
 
@@ -23,6 +24,14 @@ func main() {
 	routine.POST("/register", db.AddUser_front)
 
 	routine.POST("/review", db.Review_func, db.Get_Review)
+
+	routine.POST("/show", db.Show)
+
+	routine.POST("/add_camera", detection.Add_camera)
+
+	routine.POST("/modify_camera", detection.Modify_camera)
+
+	routine.GET("/camera/:number", detection.Serach_camera)
 
 	routine.Run("0.0.0.0:9000")
 }
