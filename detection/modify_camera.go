@@ -18,7 +18,7 @@ func Modify_camera(modify_camera *gin.Context) {
 			fmt.Println(err.Error())
 		}
 		fmt.Println(camera)
-		sql_str := "UPDATE detection.camera set position = ?,task = ?,rtsp = ?,remarks = ?,probability= ?,framerate = ?,frameratetest = ? where number = ?"
+		sql_str := "UPDATE detection.cameras set position = ?,task = ?,rtsp = ?,remarks = ?,probability= ?,framerate = ?,frameratetest = ? where number = ?"
 		inStmt, err := Db.Prepare(sql_str)
 		if err != nil {
 			fmt.Println("预编译出现异常", err)

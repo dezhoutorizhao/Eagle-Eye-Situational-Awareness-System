@@ -40,7 +40,7 @@ func Add_camera(add_camera *gin.Context) {
 		}
 		fmt.Println(camera)
 		// 添加部分
-		sql_str := "insert into detection.camera values(?,?,?,?,?,?,?,?,?)"
+		sql_str := "insert into detection.cameras values(?,?,?,?,?,?,?,?,?)"
 		inStmt, err := Db.Prepare(sql_str)
 		if err != nil {
 			fmt.Println("预编译出现异常", err)
@@ -66,6 +66,7 @@ func Add_camera(add_camera *gin.Context) {
 		if Contains(camera.Task, "摔倒") {
 			task_str += "6"
 		}
+
 		_, err2 := inStmt.Exec(nil, camera.Number, camera.Position, task_str, camera.Rtsp, camera.Remarks, camera.Probability, camera.Framerate, camera.Frameratetest)
 		if err2 != nil {
 			fmt.Println("执行出现异常", err2)
