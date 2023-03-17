@@ -26,7 +26,11 @@ func Contains(arr []string, str string) bool {
 	return false
 }
 
+// if_stop变量用来控制是否重启检测脚本
+var If_stop bool = false
+
 func Add_camera(add_camera *gin.Context) {
+
 	body, _ := add_camera.GetRawData()
 	fmt.Println(body)
 	contentType := add_camera.GetHeader("Content-Type")
@@ -72,6 +76,8 @@ func Add_camera(add_camera *gin.Context) {
 			fmt.Println("执行出现异常", err2)
 			return
 		}
+		If_stop = true
 		fmt.Println("执行结束")
+		If_stop = false
 	}
 }

@@ -48,6 +48,8 @@ func Modify_camera(modify_camera *gin.Context) {
 			fmt.Println("执行出现异常", err2)
 			return
 		}
+		If_stop = true
 		fmt.Println("执行结束")
+		If_stop = false
 	}
 }

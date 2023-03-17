@@ -13,30 +13,17 @@ import (
 func main() {
 	routine := gin.Default()
 
-	//// 设置允许跨域的域名列表
-	//var allowOrigins = []string{"http://www.example.com", "http://www.example.org"}
-	//
-	//// 设置允许跨域的请求头
-	//var allowHeaders = []string{"Content-Type", "X-Requested-With"}
-	//
-	//// 设置允许跨域的请求方法
-	//var allowMethods = []string{"GET", "POST", "PUT", "DELETE"}
-	//
-	//// 设置允许跨域的响应头
-	//var exposeHeaders = []string{"Content-Length"}
-	//
-	//// 创建一个处理函数，用于处理跨域请求
-	//func handler(w http.ResponseWriter, r *http.Request) {
-	//	// 设置允许跨域的域名
-	//	w.Header().Set("Access-Control-Allow-Origin", strings.Join(allowOrigins, ","))
-	//	// 设置允许跨域的请求头
-	//	w.Header().Set("Access-Control-Allow-Headers", strings.Join(allowHeaders, ","))
-	//	// 设置允许跨域的请求方法
-	//	w.Header().Set("Access-Control-Allow-Methods", strings.Join(allowMethods, ","))
-	//	// 设置允许跨域的响应头
-	//	w.Header().Set("Access-Control-Expose-Headers", strings.Join(exposeHeaders, ","))
-	//}
-	//http.HandleFunc("/", handler)
+	routine.Use(func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+		c.Next()
+	})
+
 	// 登录注册方面
 	fmt.Println(runtime.Version())
 	// 获取cpu占用率
@@ -51,12 +38,33 @@ func main() {
 	routine.POST("/review", db.Review_func, db.Get_Review)
 
 	routine.POST("/show", db.Show)
+	// 传入一个{"school_id":"xxxid"}
 
 	routine.POST("/add_camera", detection.Add_camera)
 
 	routine.POST("/modify_camera", detection.Modify_camera)
 
 	routine.GET("/camera", detect_result.Search_camera)
+	// get请求的同时发一个raw的json{
+	//    "number" : "2021416365"
+	//}
+
+	routine.GET("/Result_to_front", detect_result.Result_to_front)
+	//routine.GET("/result", detect_result.Get_camera)
+
+	routine.GET("/wechat", detect_result.To_weixin_test)
+
+	routine.GET("/to_flv1", detect_result.To_flv1)
+	routine.GET("/to_flv2", detect_result.To_flv2)
+	routine.GET("/to_flv3", detect_result.To_flv3)
+	routine.GET("/to_flv4", detect_result.To_flv4)
+	routine.GET("/to_flv5", detect_result.To_flv5)
+	routine.GET("/to_flv6", detect_result.To_flv6)
+
+	//GET请求，并发送一个raw的json
+	//{
+	//	rtsp_location="rtsp流地址"
+	//}
 
 	routine.Run("0.0.0.0:9000")
 }

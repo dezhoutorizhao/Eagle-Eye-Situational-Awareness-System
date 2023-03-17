@@ -50,16 +50,36 @@ type Camera struct {
 }
 
 type Results struct {
-	Id    int             `gorm:"column:id;type:int(11);primary_key;AUTO_INCREMENT" json:"id"`
-	Photo sql.NullString  `gorm:"column:photo;type:longtext" json:"photo"`
-	Video sql.NullString  `gorm:"column:video;type:longtext" json:"video"`
-	Rate  sql.NullFloat64 `gorm:"column:rate;type:float" json:"rate"`
-	Task  sql.NullString  `gorm:"column:task;type:varchar(255)" json:"task"`
+	Id       int             `gorm:"column:id;type:int(11);primary_key;AUTO_INCREMENT" json:"id"`
+	Photo    sql.NullString  `gorm:"column:photo;type:longtext" json:"photo"`
+	Rate     sql.NullFloat64 `gorm:"column:rate;type:float" json:"rate"`
+	Task     sql.NullString  `gorm:"column:task;type:varchar(255)" json:"task"`
+	Location sql.NullString  `gorm:"column:location;type:varchar(255)" json:"location"`
 }
 
 type AlgorithmReturns struct {
 	Photo string  `json:"photo"`
-	Video string  `json:"video"`
 	Rate  float64 `json:"rate"`
 	Task  string  `json:"task"`
+}
+
+var (
+	Db_sql *sql.DB
+	err    error
+)
+
+func init() {
+	Db_sql, err = sql.Open("mysql", "root:20030729a@tcp(localhost:3306)/detection")
+	if Db_sql != nil {
+		fmt.Println("Db_sql is not nil")
+	}
+	if err != nil {
+		fmt.Println(err)
+	}
+	if err := Db_sql.Ping(); err != nil {
+		fmt.Println("open database fail")
+		return
+	} else {
+		println("yes")
+	}
 }
