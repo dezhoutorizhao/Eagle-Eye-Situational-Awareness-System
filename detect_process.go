@@ -70,7 +70,7 @@ func Detect_process(get_camera *gin.Context) {
 		drown := strings.Contains(detect_task, "5")
 		fall := strings.Contains(detect_task, "6")
 
-		Judge_fire(fire, rtsp_data, vid_stride, threshold, where_loc, get_camera)
+		Judge_fire(fire, rtsp_data, vid_stride, threshold, where_loc, get_camera, count)
 		Judge_smoke(smoke, rtsp_data, vid_stride, threshold, where_loc, get_camera)
 		Judge_railing(railing, rtsp_data, vid_stride, threshold, where_loc, get_camera)
 		Judge_wave(wave, rtsp_data, vid_stride, threshold, where_loc, get_camera)
@@ -84,7 +84,7 @@ func Detect_process(get_camera *gin.Context) {
 	//return true
 }
 
-func Judge_fire(fire bool, rtsp_data string, vid_stride int, threshold float32, where_loc string, get_camera *gin.Context) {
+func Judge_fire(fire bool, rtsp_data string, vid_stride int, threshold float32, where_loc string, get_camera *gin.Context, count int64) {
 	//fire
 	//if fire != false {
 	//	timeout := time.After(5 * time.Second) // 设置超时时间为 5 秒
@@ -100,7 +100,7 @@ func Judge_fire(fire bool, rtsp_data string, vid_stride int, threshold float32, 
 	//		}
 	//	}
 
-	Run_python_fire(rtsp_data, vid_stride, threshold, where_loc, get_camera)
+	Run_python_fire(rtsp_data, vid_stride, threshold, where_loc, get_camera, count)
 	fmt.Println(rtsp_data, " ", vid_stride, " ", threshold, " ", where_loc)
 	//}
 
@@ -132,7 +132,7 @@ func Judge_smoke(smoke bool, rtsp_data string, vid_stride int, threshold float32
 				fmt.Println("超时")
 				Judge_smoke(smoke, rtsp_data, vid_stride, threshold, where_loc, get_camera)
 			case <-ticker:
-				Run_python_fire(rtsp_data, vid_stride, threshold, where_loc, get_camera)
+
 			}
 		}
 		fmt.Println(rtsp_data, " ", vid_stride, " ", threshold, " ", where_loc)
@@ -150,7 +150,7 @@ func Judge_railing(railing bool, rtsp_data string, vid_stride int, threshold flo
 				fmt.Println("超时")
 				Judge_railing(railing, rtsp_data, vid_stride, threshold, where_loc, get_camera)
 			case <-ticker:
-				Run_python_fire(rtsp_data, vid_stride, threshold, where_loc, get_camera)
+
 			}
 		}
 		fmt.Println(rtsp_data, " ", vid_stride, " ", threshold, " ", where_loc)
@@ -169,7 +169,7 @@ func Judge_wave(wave bool, rtsp_data string, vid_stride int, threshold float32, 
 				time.Sleep(300 * time.Millisecond)
 				Judge_wave(wave, rtsp_data, vid_stride, threshold, where_loc, get_camera)
 			case <-ticker:
-				Run_python_fire(rtsp_data, vid_stride, threshold, where_loc, get_camera)
+
 			}
 		}
 
@@ -187,7 +187,7 @@ func Judge_drown(drown bool, rtsp_data string, vid_stride int, threshold float32
 				fmt.Println("超时")
 				Judge_drown(drown, rtsp_data, vid_stride, threshold, where_loc, get_camera)
 			case <-ticker:
-				Run_python_fire(rtsp_data, vid_stride, threshold, where_loc, get_camera)
+
 			}
 		}
 		fmt.Println(rtsp_data, " ", vid_stride, " ", threshold, " ", where_loc)
@@ -204,7 +204,7 @@ func Judge_fall(fall bool, rtsp_data string, vid_stride int, threshold float32, 
 				fmt.Println("超时")
 				Judge_fall(fall, rtsp_data, vid_stride, threshold, where_loc, get_camera)
 			case <-ticker:
-				Run_python_fire(rtsp_data, vid_stride, threshold, where_loc, get_camera)
+
 			}
 		}
 		fmt.Println(rtsp_data, " ", vid_stride, " ", threshold, " ", where_loc)
@@ -213,7 +213,7 @@ func Judge_fall(fall bool, rtsp_data string, vid_stride int, threshold float32, 
 
 //以上代码中，timeout 是一个 time.After() 函数返回的 chan time.Time 类型的 channel，当超过设定时间后会从这个 channel 中接收到一个时间值，表示已经超时了。在 for 循环中，我们通过 select 语句来监听 timeout 和 ticker 这两个 channel，如果 timeout 先接收到了值，那么就退出循环，停止调用 Run_python_wave() 函数。如果 ticker 先接收到了值，那么就调用 Run_python_wave() 函数，然后等待下一次循环。这样就可以实现在超过一定时间后停止函数的调用。
 
-func Run_python_fire(data string, vid_stride int, threshold float32, where_loc string, fire *gin.Context) {
+func Run_python_fire(data string, vid_stride int, threshold float32, where_loc string, fire *gin.Context, count int64) {
 
 	//获取工作目录
 	dir, err := os.Getwd()
@@ -252,58 +252,56 @@ func Run_python_fire(data string, vid_stride int, threshold float32, where_loc s
 
 		//解析并添加到数据库中
 		trans_err := json.Unmarshal([]byte(text), &algorithm_result)
-
-		photoInter := algorithm_result["Photo"]
-
-		var photo sql.NullString
-		if photoInter != nil {
-			photo.String = photoInter.(string)
-			println("这是photoInter", photo.String)
-			photo.Valid = true
-		}
-		rateInter := algorithm_result["Rate"]
-		var rate sql.NullFloat64
-		if rateInter != nil {
-			rate.Float64 = rateInter.(float64)
-			rate.Valid = true
-		}
-		taskInter := algorithm_result["Task"]
-		var task sql.NullString
-		if taskInter != nil {
-			task.String = taskInter.(string)
-			task.Valid = true
-		}
-		locationInter := algorithm_result["Location"]
-		var location sql.NullString
-		if locationInter != nil {
-			location.String = locationInter.(string)
-			location.Valid = true
-		}
-
-		if err != nil {
+		if trans_err != nil {
 			fmt.Println(trans_err)
 		}
+
+		insert_photo := algorithm_result["Photo"].(string)
+		rate := algorithm_result["Rate"].(string)
+		insert_task := algorithm_result["Task"].(string)
+		insert_location := algorithm_result["Location"].(string)
+
+		var temp_Review int8
+		temp_Review = 0
+		this_time := getDatetime()
+		insert_rate, _ := strconv.ParseFloat(rate, 64)
+
+		sqlStr := "insert into detection.results(photo,rate,task,location,time,Review) values(?,?,?,?,?,?)"
+
+		fmt.Println(sqlStr)
+		inStmt, err := Db_sql.Prepare(sqlStr)
+		if err != nil {
+			fmt.Println("预编译出现异常", err)
+		}
+		fmt.Println(inStmt)
+		_, err2 := inStmt.Exec(insert_photo, insert_rate, insert_task, insert_location, this_time, temp_Review)
+		if err2 != nil {
+			fmt.Println("执行出现异常", err2)
+		}
+
 		//temp := algorithm_result["Photo"]
 		//println("这是Photo", temp.(string))
-		if algorithm_result["Photo"] == nil {
-			fmt.Println("未检测到结果")
-			return
-		} else {
-			println("可以进行到这一步")
-			this_time := getDatetime()
-			temp_Review := 0
-			s1 := Add_to_database{
-				Photo:    photo,
-				Rate:     rate,
-				Task:     task,
-				Location: location,
-				Time:     this_time,
-				Review:   temp_Review,
-			}
-			println(s1.Photo.String)
-			//create_err := DB.Create(&s1).Error
-			//fmt.Println(create_err)
-		}
+
+		// from
+		//if algorithm_result["Photo"] == nil {
+		//	fmt.Println("未检测到结果")
+		//	return
+		//} else {
+		//	println("可以进行到这一步")
+		//	this_time := getDatetime()
+		//	temp_Review := 0
+		//	s1 := Add_to_database{
+		//		Photo:    photo,
+		//		Rate:     rate,
+		//		Task:     task,
+		//		Location: location,
+		//		Time:     this_time,
+		//		Review:   temp_Review,
+		//	}
+		//	println(s1.Photo.String)
+		//create_err := DB.Create(&s1).Error
+		//fmt.Println(create_err)
+		//}
 		if err := scanner.Err(); err != nil {
 			panic(err)
 		}
