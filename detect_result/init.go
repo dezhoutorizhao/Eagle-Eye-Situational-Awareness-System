@@ -49,12 +49,24 @@ type Camera struct {
 	Frameratetest string `gorm:"column:frameratetest;type:varchar(45)" json:"frameratetest"`
 }
 
+// 解析算法端返回结果的struct
 type Results struct {
 	Id       int             `gorm:"column:id;type:int(11);primary_key;AUTO_INCREMENT" json:"id"`
 	Photo    sql.NullString  `gorm:"column:photo;type:longtext" json:"photo"`
 	Rate     sql.NullFloat64 `gorm:"column:rate;type:float" json:"rate"`
 	Task     sql.NullString  `gorm:"column:task;type:varchar(255)" json:"task"`
 	Location sql.NullString  `gorm:"column:location;type:varchar(255)" json:"location"`
+}
+
+// 添加到数据库中带时间的struct
+type Add_to_database struct {
+	Id       int             `gorm:"column:id;type:int(11);primary_key;AUTO_INCREMENT" json:"id"`
+	Photo    sql.NullString  `gorm:"column:photo;type:longtext" json:"photo"`
+	Rate     sql.NullFloat64 `gorm:"column:rate;type:float" json:"rate"`
+	Task     sql.NullString  `gorm:"column:task;type:varchar(255)" json:"task"`
+	Location sql.NullString  `gorm:"column:location;type:varchar(255)" json:"location"`
+	Time     sql.NullString  `gorm:"column:time;type:varchar(255)" json:"time"`
+	Review   int             `gorm:"column:review;type:tinyint" json:"review"`
 }
 
 type AlgorithmReturns struct {

@@ -30,7 +30,7 @@ func Result_to_front(to_front *gin.Context) {
 
 	rows, err := Db_sql.Query("SELECT * FROM detection.results")
 
-	results_to_front := make([]Results, 0)
+	results_to_front := make([]Add_to_database, 0)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -41,19 +41,23 @@ func Result_to_front(to_front *gin.Context) {
 		var Rate sql.NullFloat64
 		var Task sql.NullString
 		var Location sql.NullString
+		var Time sql.NullString
+		var Review int
 
-		err = rows.Scan(&Id, &Photo, &Rate, &Task, &Location)
+		err = rows.Scan(&Id, &Photo, &Rate, &Task, &Location, &Time, &Review)
 		if err != nil {
 			fmt.Println(err.Error())
 			return
 		}
 
-		result_to_front := Results{
+		result_to_front := Add_to_database{
 			Id:       Id,
 			Photo:    Photo,
 			Rate:     Rate,
 			Task:     Task,
 			Location: Location,
+			Time:     Time,
+			Review:   Review,
 		}
 		results_to_front = append(results_to_front, result_to_front)
 	}

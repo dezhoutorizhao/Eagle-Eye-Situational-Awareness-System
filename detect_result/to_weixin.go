@@ -26,9 +26,27 @@ type Weixin_json struct {
 	NextOpenid string `json:"next_openid"`
 }
 
-func To_weixin(result Results) {
+type Weixin_Results struct {
+	Id       int    `json:"id"`
+	Photo    string `json:"photo"`
+	Rate     string `json:"rate"`
+	Task     string `json:"task"`
+	Location string `json:"location"`
+}
+
+func To_weixin(to_weixin *gin.Context) {
 	Get_token()
 	Get_openid()
+
+	//接收数据
+	body, _ := to_weixin.GetRawData()
+	var result Weixin_Results
+	err := json.Unmarshal(body, &result)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	//生成数据阶段
 	cfg := &wechat.WxConfig{
 		AppId: "wx0942daad1454b2fe",
 		//AppId:  NextOpenId,
@@ -41,6 +59,8 @@ func To_weixin(result Results) {
 
 	wechat_msg := "警告!!!\n" + "地点:" + temp_location + "\n" + "发生了" + temp_task + "的紧急事件\n" + "检测概率为:" + temp_rate
 
+	//发送阶段
+	println(wechat_msg)
 	wechat.New(cfg).SendText(NextOpenId, wechat_msg)
 
 	for _, value := range Input_NextOpenId {
@@ -51,24 +71,24 @@ func To_weixin(result Results) {
 	Input_NextOpenId = []string{}
 }
 
-func To_weixin_test(to_weixin *gin.Context) {
-	Get_token()
-	Get_openid()
-	cfg := &wechat.WxConfig{
-		AppId: "wx0942daad1454b2fe",
-		//AppId:  NextOpenId,
-		Secret: "d1be5a7ac246c706a389dbf45656ea2c",
-	}
-	print("这是主函数中调用的结果 ", Input_NextOpenId)
-
-	//wechat_msg := "警告!" + "地点:" + result.String + ""
-	for _, value := range Input_NextOpenId {
-		wechat.New(cfg).SendText(value, "hello world")
-		println("已发送")
-	}
-
-	Input_NextOpenId = []string{}
-}
+//func To_weixin_test(to_weixin *gin.Context) {
+//	Get_token()
+//	Get_openid()
+//	cfg := &wechat.WxConfig{
+//		AppId: "wx0942daad1454b2fe",
+//		//AppId:  NextOpenId,
+//		Secret: "d1be5a7ac246c706a389dbf45656ea2c",
+//	}
+//	print("这是主函数中调用的结果 ", Input_NextOpenId)
+//
+//	//wechat_msg := "警告!" + "地点:" + result.String + ""
+//	for _, value := range Input_NextOpenId {
+//		wechat.New(cfg).SendText(value, "hello world")
+//		println("已发送")
+//	}
+//
+//	Input_NextOpenId = []string{}
+//}
 
 // 获取token
 func Get_token() {

@@ -7,6 +7,7 @@ import (
 )
 
 type Camera struct {
+	Id            int      `json:"id"`
 	Number        string   `json:"number"`
 	Position      string   `json:"position"`
 	Task          []string `json:"task"`
