@@ -37,8 +37,6 @@ type Weixin_Results struct {
 func To_weixin(to_weixin *gin.Context) {
 	Get_token()
 	Get_openid()
-
-	//接收数据
 	body, _ := to_weixin.GetRawData()
 	var result Weixin_Results
 	err := json.Unmarshal(body, &result)
@@ -46,7 +44,6 @@ func To_weixin(to_weixin *gin.Context) {
 		fmt.Println(err.Error())
 	}
 
-	//生成数据阶段
 	cfg := &wechat.WxConfig{
 		AppId: "wx0942daad1454b2fe",
 		//AppId:  NextOpenId,
@@ -59,8 +56,6 @@ func To_weixin(to_weixin *gin.Context) {
 
 	wechat_msg := "警告!!!\n" + "地点:" + temp_location + "\n" + "发生了" + temp_task + "的紧急事件\n" + "检测概率为:" + temp_rate
 
-	//发送阶段
-	println(wechat_msg)
 	wechat.New(cfg).SendText(NextOpenId, wechat_msg)
 
 	for _, value := range Input_NextOpenId {
@@ -70,25 +65,6 @@ func To_weixin(to_weixin *gin.Context) {
 
 	Input_NextOpenId = []string{}
 }
-
-//func To_weixin_test(to_weixin *gin.Context) {
-//	Get_token()
-//	Get_openid()
-//	cfg := &wechat.WxConfig{
-//		AppId: "wx0942daad1454b2fe",
-//		//AppId:  NextOpenId,
-//		Secret: "d1be5a7ac246c706a389dbf45656ea2c",
-//	}
-//	print("这是主函数中调用的结果 ", Input_NextOpenId)
-//
-//	//wechat_msg := "警告!" + "地点:" + result.String + ""
-//	for _, value := range Input_NextOpenId {
-//		wechat.New(cfg).SendText(value, "hello world")
-//		println("已发送")
-//	}
-//
-//	Input_NextOpenId = []string{}
-//}
 
 // 获取token
 func Get_token() {
@@ -146,6 +122,15 @@ func Get_token() {
 //	print(NextOpenId + " this is next next_openid,openid获取成功")
 //}
 
+type OpenidList struct {
+	TotalCount int `json:"total"`
+	Count      int `json:"count"`
+	Data       struct {
+		Openid []string `json:"openid"`
+	} `json:"data"`
+	NextOpenid string `json:"next_openid"`
+}
+
 func Get_openid() {
 	//url := "https://api.weixin.qq.com/cgi-bin/user/get?access_token=" + Input_Accesstoken + "&next_openid=" + "os1tV6JjmH5D1fAADh8GF7j5FRgs"
 	url := "https://api.weixin.qq.com/cgi-bin/user/get?access_token=" + Input_Accesstoken
@@ -162,22 +147,34 @@ func Get_openid() {
 	}
 	fmt.Println(string(body), "this is body")
 	// 解析JSON
-	jsonParsed, err := gabs.ParseJSON(body)
+	//jsonParsed, err := gabs.ParseJSON(body)
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
+	//NextOpenId, ok := jsonParsed.Path("next_openid").Data().(string)
+	//if !ok || NextOpenId == "" {
+	//	fmt.Println("已经获取完所有用户的openid")
+	//	return
+	//}
+	////Input_NextOpenId = NextOpenId
+	//var weixin_openid Weixin_json
+	//err = json.Unmarshal(body, &weixin_openid)
+	//for _, openid := range weixin_openid.Data.Openid {
+	//	Input_NextOpenId = append(Input_NextOpenId, openid)
+	//}
+
+	var openidList OpenidList
+	err = json.Unmarshal(body, &openidList)
 	if err != nil {
 		fmt.Println(err)
-		return
 	}
-	NextOpenId, ok := jsonParsed.Path("next_openid").Data().(string)
-	if !ok || NextOpenId == "" {
-		fmt.Println("已经获取完所有用户的openid")
-		return
-	}
-	//Input_NextOpenId = NextOpenId
-	var weixin_openid Weixin_json
-	err = json.Unmarshal(body, &weixin_openid)
-	for _, openid := range weixin_openid.Data.Openid {
+	for _, openid := range openidList.Data.Openid {
+		fmt.Println(openid)
 		Input_NextOpenId = append(Input_NextOpenId, openid)
 	}
+
+	fmt.Println(NextOpenId + " this is next next_openid,openid获取成功")
 
 	fmt.Println(NextOpenId + " this is next next_openid,openid获取成功")
 }
