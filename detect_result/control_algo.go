@@ -29,7 +29,7 @@ func Run_python_fire(data string, vid_stride int, threshold float32, where_loc s
 	temp_threshold := fmt.Sprintf("%f", threshold)
 
 	//传参调用，并返回返回值
-	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire")
+	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire", "--webcam")
 	fmt.Println(cmd)
 
 	stdoutPipe, err := cmd.StdoutPipe()
@@ -102,7 +102,7 @@ func Run_python_smoke(data string, vid_stride int, threshold float32, where_loc 
 	temp_threshold := fmt.Sprintf("%f", threshold)
 
 	//传参调用，并返回返回值
-	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire")
+	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire", "--webcam")
 	fmt.Println(cmd)
 
 	stdoutPipe, err := cmd.StdoutPipe()
@@ -175,7 +175,7 @@ func Run_python_railing(data string, vid_stride int, threshold float32, where_lo
 	temp_threshold := fmt.Sprintf("%f", threshold)
 
 	//传参调用，并返回返回值
-	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire")
+	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire", "--webcam")
 	fmt.Println(cmd)
 
 	stdoutPipe, err := cmd.StdoutPipe()
@@ -248,7 +248,7 @@ func Run_python_wave(data string, vid_stride int, threshold float32, where_loc s
 	temp_threshold := fmt.Sprintf("%f", threshold)
 
 	//传参调用，并返回返回值
-	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire")
+	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire", "--webcam")
 	fmt.Println(cmd)
 
 	stdoutPipe, err := cmd.StdoutPipe()
@@ -321,7 +321,7 @@ func Run_python_drown(data string, vid_stride int, threshold float32, where_loc 
 	temp_threshold := fmt.Sprintf("%f", threshold)
 
 	//传参调用，并返回返回值
-	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire")
+	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire", "--webcam")
 	fmt.Println(cmd)
 
 	stdoutPipe, err := cmd.StdoutPipe()
@@ -394,7 +394,7 @@ func Run_python_fall(data string, vid_stride int, threshold float32, where_loc s
 	temp_threshold := fmt.Sprintf("%f", threshold)
 
 	//传参调用，并返回返回值
-	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire")
+	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire", "--webcam")
 	fmt.Println(cmd)
 
 	stdoutPipe, err := cmd.StdoutPipe()
