@@ -16,11 +16,12 @@ type Review struct {
 }
 
 type Get_information struct {
-	Get_un      string `json:"review_un"`
-	Get_pw      string `json:"review_pw"`
-	Get_em      string `json:"review_em"`
-	Get_role    string `json:"review_role"`
-	Get_whether bool   `json:"review_whether"`
+	Get_un        string `json:"review_un"`
+	Get_pw        string `json:"review_pw"`
+	Get_em        string `json:"review_em"`
+	Get_role      string `json:"review_role"`
+	Get_school_id string `json:"review_school_id"`
+	Get_whether   bool   `json:"review_whether"`
 }
 
 func Review_func(review_gin *gin.Context) {
@@ -75,29 +76,30 @@ func Get_Review(get_review *gin.Context) {
 			return
 		}
 		if user.Get_role == "管理员" {
-			sql_str := "insert into user_login.users values(?,?,?,?,?)"
+			sql_str := "insert into user_login.users values(?,?,?,?,?,?)"
 			inStmt, err := Db.Prepare(sql_str)
 			if err != nil {
 				fmt.Println("预编译出现异常", err)
 			}
-			_, err2 := inStmt.Exec(nil, user.Get_un, user.Get_pw, user.Get_em, user.Get_role)
+			_, err2 := inStmt.Exec(nil, user.Get_un, user.Get_pw, user.Get_em, user.Get_role, user.Get_school_id)
 			if err2 != nil {
 				fmt.Println("执行出现异常", err2)
 			}
 		} else {
-			sql_str := "insert into user_login.users values(?,?,?,?,?)"
+			sql_str := "insert into user_login.users values(?,?,?,?,?,?)"
 			inStmt, err := Db.Prepare(sql_str)
 			if err != nil {
 				fmt.Println("预编译出现异常", err)
 			}
-			_, err2 := inStmt.Exec(nil, user.Get_un, user.Get_pw, user.Get_em, user.Get_role)
+			_, err2 := inStmt.Exec(nil, user.Get_un, user.Get_pw, user.Get_em, user.Get_role, user.Get_school_id)
 			if err2 != nil {
 				fmt.Println("执行出现异常", err2)
 			}
 		}
 		// 添加完后删除
-		delete_sql := "DELETE FROM user_login.register_users WHERE number= ?"
-		_, err = Db.Query(delete_sql, user.Get_un)
+		delete_sql := "DELETE FROM user_login.register_users WHERE number = ?"
+		println("number是", user.Get_school_id)
+		_, err = Db.Query(delete_sql, user.Get_school_id)
 		if err != nil {
 			fmt.Println(err)
 		}

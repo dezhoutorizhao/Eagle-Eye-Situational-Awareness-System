@@ -10,25 +10,37 @@ import (
 )
 
 type User struct {
-	Id int
-	UserName string
-	Password string
-	Email string
+	Id        int    `json:"id"`
+	UserName  string `json:"user_name"`
+	Password  string `json:"password"`
+	Email     string `json:"email"`
+	Role      string `json:"role"`
+	School_id string `json:"school_id"`
 }
 
+type User_login struct {
+	Id            int    `json:"id"`
+	UserName      string `json:"user_name"`
+	Password      string `json:"password"`
+	Email         string `json:"email"`
+	Role          string `json:"role"`
+	School_id     string `json:"school_id"`
+	Whether_login string `json:"whether_login"`
+}
 
 var (
-	id int
-	username string
-	password string
-	email string
+	id           int
+	username     string
+	password     string
+	email        string
 	login_status int
+	role         string
+	school_id    string
 )
 
-
-func (user *User) GetUserByUsername(un string) (*User,error) {
+func (user *User) GetUserByUsername(un string) (*User, error) {
 	// sql语句
-	sqlStr := "SELECT id, username, password, email FROM user_login.users WHERE username = ?";
+	sqlStr := "SELECT id, username, password, email,role,school_id FROM user_login.users WHERE username = ?"
 	// QueryRow执行一次查询，并期望返回最多一行结果，即row
 	fmt.Println(sqlStr)
 	if Db == nil {
@@ -41,15 +53,17 @@ func (user *User) GetUserByUsername(un string) (*User,error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		err := rows.Scan(&id, &username, &password, &email)
+		err := rows.Scan(&id, &username, &password, &email, &role, &school_id)
 		if err != nil {
 			return nil, err
 		}
 		u := &User{
-			Id: id,
-			UserName: username,
-			Password: password,
-			Email: email,
+			Id:        id,
+			UserName:  username,
+			Password:  password,
+			Email:     email,
+			Role:      role,
+			School_id: school_id,
 		}
 		fmt.Println(u)
 		return u, nil
@@ -62,13 +76,12 @@ func (user *User) GetUserByUsername(un string) (*User,error) {
 	return nil, nil
 }
 
-
 func checkLogin(username string, password string) int {
 	// user是从前端接收的数据
 	user := &User{}
 	// u是根据username查询到的数据
 	u, err := user.GetUserByUsername(username)
-	fmt.Println(username,password)
+	fmt.Println(username, password)
 	fmt.Println(u)
 	if err != nil {
 		fmt.Println(err)
@@ -96,14 +109,14 @@ func checkLogin(username string, password string) int {
 func Login(c *gin.Context) {
 	//username := c.PostForm("username")
 	//password := c.PostForm("password")
-	body , _ := c.GetRawData()
+	body, _ := c.GetRawData()
 	type login struct {
 		UName string `json:"username"`
 		PWord string `json:"password"`
 	}
 
 	var user login
-	err := json.Unmarshal(body,&user)
+	err := json.Unmarshal(body, &user)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -124,6 +137,17 @@ func Login(c *gin.Context) {
 
 func If_success(c *gin.Context) {
 	if login_status == 200 {
-		c.String(200,"success")
+		//c.String(200, "success")
+		user_whole := User_login{
+			Id:            id,
+			UserName:      username,
+			Password:      password,
+			Email:         email,
+			Role:          role,
+			School_id:     school_id,
+			Whether_login: "success",
+		}
+
+		c.JSON(200, user_whole)
 	}
 }

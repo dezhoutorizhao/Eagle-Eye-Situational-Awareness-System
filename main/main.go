@@ -90,6 +90,7 @@ func main() {
 	routine.POST("/Modify_user", db.Modify_user)
 	routine.GET("/Push_to_front", detect_result.Push_to_front)
 	routine.POST("/Delete_user", db.Delete_user)
+	routine.POST("/Delete_camera", detection.Delete_camera)
 
 	routine.Run("0.0.0.0:9000")
 }
