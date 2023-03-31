@@ -21,7 +21,7 @@ func Run_python_fire(data string, vid_stride int, threshold float32, where_loc s
 		fmt.Println("获取当前工作目录出错：", err)
 		return false
 	}
-	pythonFile := filepath.Join(dir, "./Files/Fire", "/dtest.py")
+	pythonFile := filepath.Join(dir, "./../Files/Fire", "/dtest.py")
 	fmt.Println(pythonFile)
 
 	//将参数转为指定格式
@@ -31,6 +31,7 @@ func Run_python_fire(data string, vid_stride int, threshold float32, where_loc s
 	//传参调用，并返回返回值
 	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire", "--webcam")
 	fmt.Println(cmd)
+	fmt.Println("这是data", data)
 
 	stdoutPipe, err := cmd.StdoutPipe()
 	if err != nil {
@@ -94,7 +95,7 @@ func Run_python_smoke(data string, vid_stride int, threshold float32, where_loc 
 		fmt.Println("获取当前工作目录出错：", err)
 		return false
 	}
-	pythonFile := filepath.Join(dir, "./Files/Fire", "/dtest.py")
+	pythonFile := filepath.Join(dir, "./../Files/Smoking", "/dtest.py")
 	fmt.Println(pythonFile)
 
 	//将参数转为指定格式
@@ -102,7 +103,7 @@ func Run_python_smoke(data string, vid_stride int, threshold float32, where_loc 
 	temp_threshold := fmt.Sprintf("%f", threshold)
 
 	//传参调用，并返回返回值
-	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire", "--webcam")
+	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "smoke", "--webcam")
 	fmt.Println(cmd)
 
 	stdoutPipe, err := cmd.StdoutPipe()
@@ -167,7 +168,7 @@ func Run_python_railing(data string, vid_stride int, threshold float32, where_lo
 		fmt.Println("获取当前工作目录出错：", err)
 		return false
 	}
-	pythonFile := filepath.Join(dir, "./Files/Fire", "/dtest.py")
+	pythonFile := filepath.Join(dir, "./../Files/Climb", "/dtest.py")
 	fmt.Println(pythonFile)
 
 	//将参数转为指定格式
@@ -175,7 +176,7 @@ func Run_python_railing(data string, vid_stride int, threshold float32, where_lo
 	temp_threshold := fmt.Sprintf("%f", threshold)
 
 	//传参调用，并返回返回值
-	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire", "--webcam")
+	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "climb", "--webcam")
 	fmt.Println(cmd)
 
 	stdoutPipe, err := cmd.StdoutPipe()
@@ -240,7 +241,7 @@ func Run_python_wave(data string, vid_stride int, threshold float32, where_loc s
 		fmt.Println("获取当前工作目录出错：", err)
 		return false
 	}
-	pythonFile := filepath.Join(dir, "./Files/Fire", "/dtest.py")
+	pythonFile := filepath.Join(dir, "./../Files/Wave", "/dtest.py")
 	fmt.Println(pythonFile)
 
 	//将参数转为指定格式
@@ -248,7 +249,7 @@ func Run_python_wave(data string, vid_stride int, threshold float32, where_loc s
 	temp_threshold := fmt.Sprintf("%f", threshold)
 
 	//传参调用，并返回返回值
-	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire", "--webcam")
+	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "wave", "--webcam")
 	fmt.Println(cmd)
 
 	stdoutPipe, err := cmd.StdoutPipe()
@@ -313,7 +314,7 @@ func Run_python_drown(data string, vid_stride int, threshold float32, where_loc 
 		fmt.Println("获取当前工作目录出错：", err)
 		return false
 	}
-	pythonFile := filepath.Join(dir, "./Files/Fire", "/dtest.py")
+	pythonFile := filepath.Join(dir, "./../Files/Drawn", "/dtest.py")
 	fmt.Println(pythonFile)
 
 	//将参数转为指定格式
@@ -321,7 +322,7 @@ func Run_python_drown(data string, vid_stride int, threshold float32, where_loc 
 	temp_threshold := fmt.Sprintf("%f", threshold)
 
 	//传参调用，并返回返回值
-	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire", "--webcam")
+	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "drown", "--webcam")
 	fmt.Println(cmd)
 
 	stdoutPipe, err := cmd.StdoutPipe()
@@ -386,7 +387,7 @@ func Run_python_fall(data string, vid_stride int, threshold float32, where_loc s
 		fmt.Println("获取当前工作目录出错：", err)
 		return false
 	}
-	pythonFile := filepath.Join(dir, "./Files/Fire", "/dtest.py")
+	pythonFile := filepath.Join(dir, "./../Files/Fall", "/dtest.py")
 	fmt.Println(pythonFile)
 
 	//将参数转为指定格式
@@ -394,7 +395,80 @@ func Run_python_fall(data string, vid_stride int, threshold float32, where_loc s
 	temp_threshold := fmt.Sprintf("%f", threshold)
 
 	//传参调用，并返回返回值
-	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fire", "--webcam")
+	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "fall", "--webcam")
+	fmt.Println(cmd)
+
+	stdoutPipe, err := cmd.StdoutPipe()
+	if err != nil {
+		panic(err)
+	}
+	defer stdoutPipe.Close()
+	if err := cmd.Start(); err != nil {
+		panic(err)
+	}
+	scanner := bufio.NewScanner(stdoutPipe)
+	for scanner.Scan() {
+		text = scanner.Text()
+		fmt.Println("脚本输出：", text)
+
+		//这里放的转换
+		var algorithm_result map[string]interface{}
+
+		Push_to_front(fire)
+
+		//解析并添加到数据库中
+		trans_err := json.Unmarshal([]byte(text), &algorithm_result)
+		if trans_err != nil {
+			fmt.Println(trans_err)
+		}
+
+		insert_photo := algorithm_result["Photo"].(string)
+		rate := algorithm_result["Rate"].(string)
+		insert_task := algorithm_result["Task"].(string)
+		insert_location := algorithm_result["Location"].(string)
+
+		var temp_Review int8
+		temp_Review = 0
+		this_time := getDatetime()
+		insert_rate, _ := strconv.ParseFloat(rate, 64)
+
+		sqlStr := "insert into detection.results(photo,rate,task,location,time,Review) values(?,?,?,?,?,?)"
+
+		fmt.Println(sqlStr)
+		inStmt, err := Db_sql.Prepare(sqlStr)
+		if err != nil {
+			fmt.Println("预编译出现异常", err)
+		}
+		fmt.Println(inStmt)
+		_, err2 := inStmt.Exec(insert_photo, insert_rate, insert_task, insert_location, this_time, temp_Review)
+		if err2 != nil {
+			fmt.Println("执行出现异常", err2)
+		}
+
+		if err := scanner.Err(); err != nil {
+			panic(err)
+		}
+
+	}
+	return true
+}
+
+func Run_python_water(data string, vid_stride int, threshold float32, where_loc string, fire *gin.Context) bool {
+	//获取工作目录
+	dir, err := os.Getwd()
+	if err != nil {
+		fmt.Println("获取当前工作目录出错：", err)
+		return false
+	}
+	pythonFile := filepath.Join(dir, "./../Files/Water", "/dtest.py")
+	fmt.Println(pythonFile)
+
+	//将参数转为指定格式
+	temp_vid_stride := strconv.Itoa(vid_stride)
+	temp_threshold := fmt.Sprintf("%f", threshold)
+
+	//传参调用，并返回返回值
+	cmd := exec.Command("python", pythonFile, "--src", data, "--conf", temp_threshold, "--interval", temp_vid_stride, "--location", where_loc, "--task", "water", "--webcam")
 	fmt.Println(cmd)
 
 	stdoutPipe, err := cmd.StdoutPipe()

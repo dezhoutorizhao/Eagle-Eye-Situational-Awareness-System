@@ -8,11 +8,11 @@ import (
 )
 
 type Review struct {
-	Review_un   string
-	Review_pw   string
-	Review_em   string
-	Review_num  string
-	Review_role string
+	Review_un        string
+	Review_pw        string
+	Review_em        string
+	Review_role      string
+	Review_school_id string
 }
 
 type Get_information struct {
@@ -36,21 +36,21 @@ func Review_func(review_gin *gin.Context) {
 		var Review_un string
 		var Review_pw string
 		var Review_em string
-		var Review_num string
 		var Review_role string
+		var Review_school_id string
 
-		err = rows.Scan(&Review_un, &Review_pw, &Review_em, &Review_num, &Review_role)
+		err = rows.Scan(&Review_un, &Review_pw, &Review_em, &Review_school_id, &Review_role)
 		if err != nil {
 			fmt.Println(err.Error())
 			return
 		}
 
 		review := Review{
-			Review_un:   Review_un,
-			Review_pw:   Review_pw,
-			Review_em:   Review_em,
-			Review_num:  Review_num,
-			Review_role: Review_role,
+			Review_un:        Review_un,
+			Review_pw:        Review_pw,
+			Review_em:        Review_em,
+			Review_role:      Review_role,
+			Review_school_id: Review_school_id,
 		}
 
 		reviews = append(reviews, review)

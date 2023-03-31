@@ -72,18 +72,19 @@ func Detect_process(get_camera *gin.Context) {
 			detect_task = cam.Task
 			fire := strings.Contains(detect_task, "1")
 			smoke := strings.Contains(detect_task, "2")
-			railing := strings.Contains(detect_task, "3")
+			climb := strings.Contains(detect_task, "3")
 			wave := strings.Contains(detect_task, "4")
 			drown := strings.Contains(detect_task, "5")
 			fall := strings.Contains(detect_task, "6")
-			Judge(fire, smoke, railing, wave, drown, fall, rtsp_data, vid_stride, threshold, where_loc, get_camera)
+			water := strings.Contains(detect_task, "7")
+			Judge(fire, smoke, climb, wave, drown, fall, water, rtsp_data, vid_stride, threshold, where_loc, get_camera)
 		}(camera)
 	}
 	// 等待所有goroutine执行完毕
 	wg.Wait()
 }
 
-func Judge(fire bool, smoke bool, railing bool, wave bool, drown bool, fall bool, rtsp_data string, vid_stride int, threshold float32, where_loc string, get_camera *gin.Context) {
+func Judge(fire bool, smoke bool, climb bool, wave bool, drown bool, fall bool, water bool, rtsp_data string, vid_stride int, threshold float32, where_loc string, get_camera *gin.Context) {
 
 	//在互斥锁保护下调用fire、smoke、railing、wave、drown、fall等函数
 
@@ -93,7 +94,7 @@ func Judge(fire bool, smoke bool, railing bool, wave bool, drown bool, fall bool
 	if smoke != false {
 		Judge_smoke(rtsp_data, vid_stride, threshold, where_loc, get_camera)
 	}
-	if railing != false {
+	if climb != false {
 		Judge_railing(rtsp_data, vid_stride, threshold, where_loc, get_camera)
 	}
 	if wave != false {
@@ -105,7 +106,10 @@ func Judge(fire bool, smoke bool, railing bool, wave bool, drown bool, fall bool
 	if fall != false {
 		Judge_fall(rtsp_data, vid_stride, threshold, where_loc, get_camera)
 	}
-	println("正在跑")
+	if water != false {
+		Judge_water(rtsp_data, vid_stride, threshold, where_loc, get_camera)
+	}
+	println("正在运行")
 }
 
 func Judge_fire(rtsp_data string, vid_stride int, threshold float32, where_loc string, get_camera *gin.Context) {
@@ -146,6 +150,13 @@ func Judge_drown(rtsp_data string, vid_stride int, threshold float32, where_loc 
 
 func Judge_fall(rtsp_data string, vid_stride int, threshold float32, where_loc string, get_camera *gin.Context) {
 	res := Run_python_fall(rtsp_data, vid_stride, threshold, where_loc, get_camera)
+	if res == true {
+		Judge_fall(rtsp_data, vid_stride, threshold, where_loc, get_camera)
+	}
+}
+
+func Judge_water(rtsp_data string, vid_stride int, threshold float32, where_loc string, get_camera *gin.Context) {
+	res := Run_python_water(rtsp_data, vid_stride, threshold, where_loc, get_camera)
 	if res == true {
 		Judge_fall(rtsp_data, vid_stride, threshold, where_loc, get_camera)
 	}

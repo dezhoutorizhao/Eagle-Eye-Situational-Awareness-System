@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"io"
+	"os"
+	"path/filepath"
 	"runtime"
 	"strongwill.com/db"
 	"strongwill.com/detect_result"
@@ -72,6 +74,12 @@ func main() {
 	//routine.GET("/wechat", detect_result.To_weixin_test)
 
 	routine.GET("/Total_to_flv", detect_result.Total_to_flv)
+	routine.GET("/Total_to_flv0", detect_result.To_flv0)
+	routine.GET("/Total_to_flv1", detect_result.To_flv1)
+	routine.GET("/Total_to_flv2", detect_result.To_flv2)
+	routine.GET("/Total_to_flv3", detect_result.To_flv3)
+	routine.GET("/Total_to_flv4", detect_result.To_flv4)
+	routine.GET("/Total_to_flv5", detect_result.To_flv5)
 
 	routine.POST("/Modify_logs_review", detect_result.Modify_logs_review)
 
@@ -91,6 +99,17 @@ func main() {
 	routine.GET("/Push_to_front", detect_result.Push_to_front)
 	routine.POST("/Delete_user", db.Delete_user)
 	routine.POST("/Delete_camera", detection.Delete_camera)
+
+	dir, _ := os.Getwd()
+	fmt.Println(dir, "这是当前路径")
+	fmt.Println(filepath.Join(dir, "/../flv"))
+
+	//linux版本
+	routine.Static("/detect", filepath.Join(dir, "/../detect"))
+	//windows版本
+	//routine.Static("/detect", filepath.Join(dir, "/detect"))
+
+	routine.Static("/Flv", filepath.Join(dir, "/../flv"))
 
 	routine.Run("0.0.0.0:9000")
 }

@@ -71,6 +71,9 @@ func Add_camera(add_camera *gin.Context) {
 		if Contains(camera.Task, "摔倒") {
 			task_str += "6"
 		}
+		if Contains(camera.Task, "积水") {
+			task_str += "7"
+		}
 
 		_, err2 := inStmt.Exec(nil, camera.Number, camera.Position, task_str, camera.Rtsp, camera.Remarks, camera.Probability, camera.Framerate, camera.Frameratetest)
 		if err2 != nil {

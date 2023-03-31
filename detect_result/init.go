@@ -39,14 +39,14 @@ func init() {
 
 type Camera struct {
 	Id            int    `gorm:"column:id;type:int(11);primary_key" json:"id"`
-	Number        string `gorm:"column:number;type:varchar(45)" json:"number"`
-	Position      string `gorm:"column:position;type:varchar(45)" json:"position"`
-	Task          string `gorm:"column:task;type:varchar(45)" json:"task"`
-	Rtsp          string `gorm:"column:rtsp;type:varchar(45)" json:"rtsp"`
-	Remarks       string `gorm:"column:remarks;type:varchar(45)" json:"remarks"`
-	Probability   string `gorm:"column:probability;type:varchar(45)" json:"probability"`
-	Framerate     string `gorm:"column:framerate;type:varchar(45)" json:"framerate"`
-	Frameratetest string `gorm:"column:frameratetest;type:varchar(45)" json:"frameratetest"`
+	Number        string `gorm:"column:number;type:varchar(255)" json:"number"`
+	Position      string `gorm:"column:position;type:varchar(255)" json:"position"`
+	Task          string `gorm:"column:task;type:varchar(255)" json:"task"`
+	Rtsp          string `gorm:"column:rtsp;type:varchar(255)" json:"rtsp"`
+	Remarks       string `gorm:"column:remarks;type:varchar(255)" json:"remarks"`
+	Probability   string `gorm:"column:probability;type:varchar(255)" json:"probability"`
+	Framerate     string `gorm:"column:framerate;type:varchar(255)" json:"framerate"`
+	Frameratetest string `gorm:"column:frameratetest;type:varchar(255)" json:"frameratetest"`
 }
 
 // 解析算法端返回结果的struct

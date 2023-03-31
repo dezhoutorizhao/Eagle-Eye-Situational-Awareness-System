@@ -8,7 +8,15 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 )
+
+var rtsp_location0 string
+var rtsp_location1 string
+var rtsp_location2 string
+var rtsp_location3 string
+var rtsp_location4 string
+var rtsp_location5 string
 
 func Total_to_flv(total_rtsp_flv *gin.Context) {
 	body, _ := total_rtsp_flv.GetRawData()
@@ -20,28 +28,27 @@ func Total_to_flv(total_rtsp_flv *gin.Context) {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	To_flv0(rtsp_Flv.Rtsp_location[0], total_rtsp_flv)
-	To_flv1(rtsp_Flv.Rtsp_location[1], total_rtsp_flv)
-	To_flv2(rtsp_Flv.Rtsp_location[2], total_rtsp_flv)
-	To_flv3(rtsp_Flv.Rtsp_location[3], total_rtsp_flv)
-	To_flv4(rtsp_Flv.Rtsp_location[4], total_rtsp_flv)
-	To_flv5(rtsp_Flv.Rtsp_location[5], total_rtsp_flv)
+
+	rtsp_location0 = rtsp_Flv.Rtsp_location[0]
+	rtsp_location1 = rtsp_Flv.Rtsp_location[1]
+	rtsp_location2 = rtsp_Flv.Rtsp_location[2]
+	rtsp_location3 = rtsp_Flv.Rtsp_location[3]
+	rtsp_location4 = rtsp_Flv.Rtsp_location[4]
+	rtsp_location5 = rtsp_Flv.Rtsp_location[5]
+
+	//go To_flv0(rtsp_Flv.Rtsp_location[0], total_rtsp_flv)
+	//go To_flv1(rtsp_Flv.Rtsp_location[1], total_rtsp_flv)
+	//go To_flv2(rtsp_Flv.Rtsp_location[2], total_rtsp_flv)
+	//go To_flv3(rtsp_Flv.Rtsp_location[3], total_rtsp_flv)
+	//go To_flv4(rtsp_Flv.Rtsp_location[4], total_rtsp_flv)
+	//go To_flv5(rtsp_Flv.Rtsp_location[5], total_rtsp_flv)
 
 }
 
-func To_flv0(rtsp_loc string, rtsp_flv *gin.Context) {
-	// 转码阶段
-	//body, _ := rtsp_flv.GetRawData()
-	//type Rtsp_Flv struct {
-	//	Rtsp_location string `json:"rtsp_location"`
-	//}
-	//var Rtsp_location Rtsp_Flv
-	//err := json.Unmarshal(body, &Rtsp_location)
-	//if err != nil {
-	//	fmt.Println(err.Error())
-	//}
+func To_flv0(rtsp_flv *gin.Context) {
 
-	cmd := exec.Command("gst-launch-1.0", "-e", "rtspsrc", "location="+rtsp_loc, "!", "rtph264depay", "!", "flvmux", "!", "filesink", "location=,"+"output1.flv")
+	cmd := exec.Command("gst-launch-1.0", "-e", "rtspsrc", "location="+rtsp_location0, "!", "rtph264depay", "!", "flvmux", "!", "filesink", "location=../flv/"+"output0.flv")
+	fmt.Println(cmd)
 
 	out, err := cmd.Output()
 	if err != nil {
@@ -73,7 +80,7 @@ func To_flv0(rtsp_loc string, rtsp_flv *gin.Context) {
 //上述示例代码中，使用http.HandleFunc函数创建了一个HTTP请求处理函数，该函数会打开生成的FLV文件output.flv，设置HTTP响应头为FLV格式，然后将FLV文件作为响应内容返回给客户端。
 //最后，使用http.ListenAndServe函数启动HTTP服务器，监听端口号为8080。启动后，用户可以通过浏览器访问http://localhost:8080/来获取生成的FLV文件。
 
-func To_flv1(rtsp_loc string, rtsp_flv *gin.Context) {
+func To_flv1(rtsp_flv *gin.Context) {
 
 	//// 转码阶段
 	//body, _ := rtsp_flv.GetRawData()
@@ -105,7 +112,7 @@ func To_flv1(rtsp_loc string, rtsp_flv *gin.Context) {
 	//rtsp_flv.Header("Content-Type", "video/x-flv")
 	//io.Copy(rtsp_flv.Writer, f)
 
-	cmd := exec.Command("gst-launch-1.0", "-e", "rtspsrc", "location="+rtsp_loc, "!", "rtph264depay", "!", "flvmux", "!", "filesink", "location=,"+"output1.flv")
+	cmd := exec.Command("gst-launch-1.0", "-e", "rtspsrc", "location="+rtsp_location1, "!", "rtph264depay", "!", "flvmux", "!", "filesink", "location=../flv/"+"output1.flv")
 
 	out, err := cmd.Output()
 	if err != nil {
@@ -114,7 +121,7 @@ func To_flv1(rtsp_loc string, rtsp_flv *gin.Context) {
 	fmt.Println(string(out))
 
 	// 返回给前端阶段
-	f, err := os.Open("output1.flv")
+	f, err := os.Open("../flv/output1.flv")
 	if err != nil {
 		rtsp_flv.String(http.StatusInternalServerError, err.Error())
 		return
@@ -126,9 +133,9 @@ func To_flv1(rtsp_loc string, rtsp_flv *gin.Context) {
 
 }
 
-func To_flv2(rtsp_loc string, rtsp_flv *gin.Context) {
+func To_flv2(rtsp_flv *gin.Context) {
 
-	cmd := exec.Command("gst-launch-1.0", "-e", "rtspsrc", "location="+rtsp_loc, "!", "rtph264depay", "!", "flvmux", "!", "filesink", "location=,"+"output1.flv")
+	cmd := exec.Command("gst-launch-1.0", "-e", "rtspsrc", "location="+rtsp_location2, "!", "rtph264depay", "!", "flvmux", "!", "filesink", "location=../flv/"+"output2.flv")
 
 	out, err := cmd.Output()
 	if err != nil {
@@ -137,7 +144,7 @@ func To_flv2(rtsp_loc string, rtsp_flv *gin.Context) {
 	fmt.Println(string(out))
 
 	// 返回给前端阶段
-	f, err := os.Open("output1.flv")
+	f, err := os.Open("../flv/output2.flv")
 	if err != nil {
 		rtsp_flv.String(http.StatusInternalServerError, err.Error())
 		return
@@ -149,9 +156,9 @@ func To_flv2(rtsp_loc string, rtsp_flv *gin.Context) {
 
 }
 
-func To_flv3(rtsp_loc string, rtsp_flv *gin.Context) {
+func To_flv3(rtsp_flv *gin.Context) {
 
-	cmd := exec.Command("gst-launch-1.0", "-e", "rtspsrc", "location="+rtsp_loc, "!", "rtph264depay", "!", "flvmux", "!", "filesink", "location=,"+"output1.flv")
+	cmd := exec.Command("gst-launch-1.0", "-e", "rtspsrc", "location="+rtsp_location3, "!", "rtph264depay", "!", "flvmux", "!", "filesink", "location=../flv/"+"output3.flv")
 
 	out, err := cmd.Output()
 	if err != nil {
@@ -160,7 +167,7 @@ func To_flv3(rtsp_loc string, rtsp_flv *gin.Context) {
 	fmt.Println(string(out))
 
 	// 返回给前端阶段
-	f, err := os.Open("output1.flv")
+	f, err := os.Open("../flv/output3.flv")
 	if err != nil {
 		rtsp_flv.String(http.StatusInternalServerError, err.Error())
 		return
@@ -172,9 +179,9 @@ func To_flv3(rtsp_loc string, rtsp_flv *gin.Context) {
 
 }
 
-func To_flv4(rtsp_loc string, rtsp_flv *gin.Context) {
+func To_flv4(rtsp_flv *gin.Context) {
 
-	cmd := exec.Command("gst-launch-1.0", "-e", "rtspsrc", "location="+rtsp_loc, "!", "rtph264depay", "!", "flvmux", "!", "filesink", "location=,"+"output1.flv")
+	cmd := exec.Command("gst-launch-1.0", "-e", "rtspsrc", "location="+rtsp_location4, "!", "rtph264depay", "!", "flvmux", "!", "filesink", "location=../flv/"+"output4.flv")
 
 	out, err := cmd.Output()
 	if err != nil {
@@ -183,7 +190,7 @@ func To_flv4(rtsp_loc string, rtsp_flv *gin.Context) {
 	fmt.Println(string(out))
 
 	// 返回给前端阶段
-	f, err := os.Open("output1.flv")
+	f, err := os.Open("../flv/output4.flv")
 	if err != nil {
 		rtsp_flv.String(http.StatusInternalServerError, err.Error())
 		return
@@ -195,9 +202,9 @@ func To_flv4(rtsp_loc string, rtsp_flv *gin.Context) {
 
 }
 
-func To_flv5(rtsp_loc string, rtsp_flv *gin.Context) {
+func To_flv5(rtsp_flv *gin.Context) {
 
-	cmd := exec.Command("gst-launch-1.0", "-e", "rtspsrc", "location="+rtsp_loc, "!", "rtph264depay", "!", "flvmux", "!", "filesink", "location=,"+"output1.flv")
+	cmd := exec.Command("gst-launch-1.0", "-e", "rtspsrc", "location="+rtsp_location5, "!", "rtph264depay", "!", "flvmux", "!", "filesink", "location=../flv/"+"output5.flv")
 
 	out, err := cmd.Output()
 	if err != nil {
@@ -206,7 +213,9 @@ func To_flv5(rtsp_loc string, rtsp_flv *gin.Context) {
 	fmt.Println(string(out))
 
 	// 返回给前端阶段
-	f, err := os.Open("output1.flv")
+	dir, _ := os.Getwd()
+	fmt.Println(filepath.Join(dir, "./"))
+	f, err := os.Open("../flv/output5.flv")
 	if err != nil {
 		rtsp_flv.String(http.StatusInternalServerError, err.Error())
 		return
@@ -215,5 +224,19 @@ func To_flv5(rtsp_loc string, rtsp_flv *gin.Context) {
 	//设置HTTP响应头为flv格式
 	rtsp_flv.Header("Content-Type", "video/x-flv")
 	io.Copy(rtsp_flv.Writer, f)
+
+}
+
+func test1() {
+	for i := 0; i < 10; i++ {
+		fmt.Println(rtsp_location1, "这是test1")
+	}
+
+}
+
+func test2() {
+	for i := 0; i < 10; i++ {
+		fmt.Println(rtsp_location2, "这是test2")
+	}
 
 }
