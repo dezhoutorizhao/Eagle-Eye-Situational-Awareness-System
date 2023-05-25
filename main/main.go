@@ -73,13 +73,15 @@ func main() {
 
 	//routine.GET("/wechat", detect_result.To_weixin_test)
 
-	routine.GET("/Total_to_flv", detect_result.Total_to_flv)
+	routine.POST("/Total_to_flv", detect_result.Total_to_flv)
 	routine.GET("/Total_to_flv0", detect_result.To_flv0)
 	routine.GET("/Total_to_flv1", detect_result.To_flv1)
 	routine.GET("/Total_to_flv2", detect_result.To_flv2)
 	routine.GET("/Total_to_flv3", detect_result.To_flv3)
 	routine.GET("/Total_to_flv4", detect_result.To_flv4)
 	routine.GET("/Total_to_flv5", detect_result.To_flv5)
+	routine.GET("/Total_to_flv6", detect_result.To_flv6)
+	routine.GET("/Total_to_flv7", detect_result.To_flv7)
 
 	routine.POST("/Modify_logs_review", detect_result.Modify_logs_review)
 
@@ -99,6 +101,7 @@ func main() {
 	routine.GET("/Push_to_front", detect_result.Push_to_front)
 	routine.POST("/Delete_user", db.Delete_user)
 	routine.POST("/Delete_camera", detection.Delete_camera)
+	routine.GET("/show_to_flv", detect_result.Show_to_front)
 
 	dir, _ := os.Getwd()
 	fmt.Println(dir, "这是当前路径")
@@ -106,6 +109,7 @@ func main() {
 
 	//linux版本
 	routine.Static("/detect", filepath.Join(dir, "/../detect"))
+	fmt.Println()
 	//windows版本
 	//routine.Static("/detect", filepath.Join(dir, "/detect"))
 

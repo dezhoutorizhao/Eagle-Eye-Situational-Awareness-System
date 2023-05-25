@@ -59,7 +59,7 @@ func Run_python_fire(data string, vid_stride int, threshold float32, where_loc s
 
 		insert_photo := algorithm_result["Photo"].(string)
 		rate := algorithm_result["Rate"].(string)
-		insert_task := algorithm_result["Task"].(string)
+		//insert_task := algorithm_result["Task"].(string)
 		insert_location := algorithm_result["Location"].(string)
 
 		var temp_Review int8
@@ -75,7 +75,7 @@ func Run_python_fire(data string, vid_stride int, threshold float32, where_loc s
 			fmt.Println("预编译出现异常", err)
 		}
 		fmt.Println(inStmt)
-		_, err2 := inStmt.Exec(insert_photo, insert_rate, insert_task, insert_location, this_time, temp_Review)
+		_, err2 := inStmt.Exec(insert_photo, insert_rate, "火灾", insert_location, this_time, temp_Review)
 		if err2 != nil {
 			fmt.Println("执行出现异常", err2)
 		}
@@ -132,7 +132,7 @@ func Run_python_smoke(data string, vid_stride int, threshold float32, where_loc 
 
 		insert_photo := algorithm_result["Photo"].(string)
 		rate := algorithm_result["Rate"].(string)
-		insert_task := algorithm_result["Task"].(string)
+		//insert_task := algorithm_result["Task"].(string)
 		insert_location := algorithm_result["Location"].(string)
 
 		var temp_Review int8
@@ -148,7 +148,7 @@ func Run_python_smoke(data string, vid_stride int, threshold float32, where_loc 
 			fmt.Println("预编译出现异常", err)
 		}
 		fmt.Println(inStmt)
-		_, err2 := inStmt.Exec(insert_photo, insert_rate, insert_task, insert_location, this_time, temp_Review)
+		_, err2 := inStmt.Exec(insert_photo, insert_rate, "吸烟", insert_location, this_time, temp_Review)
 		if err2 != nil {
 			fmt.Println("执行出现异常", err2)
 		}
@@ -205,7 +205,7 @@ func Run_python_railing(data string, vid_stride int, threshold float32, where_lo
 
 		insert_photo := algorithm_result["Photo"].(string)
 		rate := algorithm_result["Rate"].(string)
-		insert_task := algorithm_result["Task"].(string)
+		//insert_task := algorithm_result["Task"].(string)
 		insert_location := algorithm_result["Location"].(string)
 
 		var temp_Review int8
@@ -221,7 +221,7 @@ func Run_python_railing(data string, vid_stride int, threshold float32, where_lo
 			fmt.Println("预编译出现异常", err)
 		}
 		fmt.Println(inStmt)
-		_, err2 := inStmt.Exec(insert_photo, insert_rate, insert_task, insert_location, this_time, temp_Review)
+		_, err2 := inStmt.Exec(insert_photo, insert_rate, "栏杆", insert_location, this_time, temp_Review)
 		if err2 != nil {
 			fmt.Println("执行出现异常", err2)
 		}
@@ -278,7 +278,7 @@ func Run_python_wave(data string, vid_stride int, threshold float32, where_loc s
 
 		insert_photo := algorithm_result["Photo"].(string)
 		rate := algorithm_result["Rate"].(string)
-		insert_task := algorithm_result["Task"].(string)
+		//insert_task := algorithm_result["Task"].(string)
 		insert_location := algorithm_result["Location"].(string)
 
 		var temp_Review int8
@@ -294,7 +294,7 @@ func Run_python_wave(data string, vid_stride int, threshold float32, where_loc s
 			fmt.Println("预编译出现异常", err)
 		}
 		fmt.Println(inStmt)
-		_, err2 := inStmt.Exec(insert_photo, insert_rate, insert_task, insert_location, this_time, temp_Review)
+		_, err2 := inStmt.Exec(insert_photo, insert_rate, "挥手", insert_location, this_time, temp_Review)
 		if err2 != nil {
 			fmt.Println("执行出现异常", err2)
 		}
@@ -351,7 +351,7 @@ func Run_python_drown(data string, vid_stride int, threshold float32, where_loc 
 
 		insert_photo := algorithm_result["Photo"].(string)
 		rate := algorithm_result["Rate"].(string)
-		insert_task := algorithm_result["Task"].(string)
+		//insert_task := algorithm_result["Task"].(string)
 		insert_location := algorithm_result["Location"].(string)
 
 		var temp_Review int8
@@ -367,7 +367,7 @@ func Run_python_drown(data string, vid_stride int, threshold float32, where_loc 
 			fmt.Println("预编译出现异常", err)
 		}
 		fmt.Println(inStmt)
-		_, err2 := inStmt.Exec(insert_photo, insert_rate, insert_task, insert_location, this_time, temp_Review)
+		_, err2 := inStmt.Exec(insert_photo, insert_rate, "溺水", insert_location, this_time, temp_Review)
 		if err2 != nil {
 			fmt.Println("执行出现异常", err2)
 		}
@@ -424,7 +424,7 @@ func Run_python_fall(data string, vid_stride int, threshold float32, where_loc s
 
 		insert_photo := algorithm_result["Photo"].(string)
 		rate := algorithm_result["Rate"].(string)
-		insert_task := algorithm_result["Task"].(string)
+		//insert_task := algorithm_result["Task"].(string)
 		insert_location := algorithm_result["Location"].(string)
 
 		var temp_Review int8
@@ -440,7 +440,7 @@ func Run_python_fall(data string, vid_stride int, threshold float32, where_loc s
 			fmt.Println("预编译出现异常", err)
 		}
 		fmt.Println(inStmt)
-		_, err2 := inStmt.Exec(insert_photo, insert_rate, insert_task, insert_location, this_time, temp_Review)
+		_, err2 := inStmt.Exec(insert_photo, insert_rate, "摔倒", insert_location, this_time, temp_Review)
 		if err2 != nil {
 			fmt.Println("执行出现异常", err2)
 		}
@@ -497,7 +497,7 @@ func Run_python_water(data string, vid_stride int, threshold float32, where_loc 
 
 		insert_photo := algorithm_result["Photo"].(string)
 		rate := algorithm_result["Rate"].(string)
-		insert_task := algorithm_result["Task"].(string)
+		//insert_task := algorithm_result["Task"].(string)
 		insert_location := algorithm_result["Location"].(string)
 
 		var temp_Review int8
@@ -513,7 +513,7 @@ func Run_python_water(data string, vid_stride int, threshold float32, where_loc 
 			fmt.Println("预编译出现异常", err)
 		}
 		fmt.Println(inStmt)
-		_, err2 := inStmt.Exec(insert_photo, insert_rate, insert_task, insert_location, this_time, temp_Review)
+		_, err2 := inStmt.Exec(insert_photo, insert_rate, "积水", insert_location, this_time, temp_Review)
 		if err2 != nil {
 			fmt.Println("执行出现异常", err2)
 		}
