@@ -13,6 +13,13 @@ import (
 
 var s1 Results
 var mutex sync.Mutex
+var Stop_flag_fire bool
+var Stop_flag_smoke bool
+var Stop_flag_wave bool
+var Stop_flag_drown bool
+var Stop_flag_fall bool
+var Stop_flag_railing bool
+var Stop_flag_water bool
 
 func StringToInt(str string) int {
 	num, _ := strconv.Atoi(str)
@@ -48,10 +55,13 @@ func Detect_process(get_camera *gin.Context) {
 	var wg sync.WaitGroup
 	// 遍历cameraList，为每个camera记录创建一个goroutine并调用Judge函数
 	for i := 0; i < count; i++ {
+
 		wg.Add(1)
 		camera := cameraList[i]
+
 		go func(cam Camera) {
 			defer wg.Done()
+
 			var rtsp_data string
 			var vid_stride int     //间隔的帧数
 			var threshold float32  // 阈值的置信度
@@ -77,6 +87,7 @@ func Detect_process(get_camera *gin.Context) {
 			drown := strings.Contains(detect_task, "5")
 			fall := strings.Contains(detect_task, "6")
 			water := strings.Contains(detect_task, "7")
+
 			Judge(fire, smoke, climb, wave, drown, fall, water, rtsp_data, vid_stride, threshold, where_loc, get_camera)
 		}(camera)
 	}
@@ -115,6 +126,13 @@ func Judge(fire bool, smoke bool, climb bool, wave bool, drown bool, fall bool, 
 func Judge_fire(rtsp_data string, vid_stride int, threshold float32, where_loc string, get_camera *gin.Context) {
 
 	res := Run_python_fire(rtsp_data, vid_stride, threshold, where_loc, get_camera)
+
+	//进程停止器
+	if Stop_flag_fire == true {
+		Stop_flag_fire = false
+		fmt.Println("已关停")
+		return
+	}
 	if res == true {
 		Judge_fire(rtsp_data, vid_stride, threshold, where_loc, get_camera)
 	}
@@ -122,6 +140,13 @@ func Judge_fire(rtsp_data string, vid_stride int, threshold float32, where_loc s
 
 func Judge_smoke(rtsp_data string, vid_stride int, threshold float32, where_loc string, get_camera *gin.Context) {
 	res := Run_python_smoke(rtsp_data, vid_stride, threshold, where_loc, get_camera)
+
+	//进程停止器
+	if Stop_flag_smoke == true {
+		Stop_flag_smoke = false
+		fmt.Println("已关停")
+		return
+	}
 	if res == true {
 		Judge_smoke(rtsp_data, vid_stride, threshold, where_loc, get_camera)
 	}
@@ -129,6 +154,13 @@ func Judge_smoke(rtsp_data string, vid_stride int, threshold float32, where_loc 
 
 func Judge_railing(rtsp_data string, vid_stride int, threshold float32, where_loc string, get_camera *gin.Context) {
 	res := Run_python_railing(rtsp_data, vid_stride, threshold, where_loc, get_camera)
+
+	//进程停止器
+	if Stop_flag_railing == true {
+		Stop_flag_railing = false
+		fmt.Println("已关停")
+		return
+	}
 	if res == true {
 		Judge_railing(rtsp_data, vid_stride, threshold, where_loc, get_camera)
 	}
@@ -136,6 +168,13 @@ func Judge_railing(rtsp_data string, vid_stride int, threshold float32, where_lo
 
 func Judge_wave(rtsp_data string, vid_stride int, threshold float32, where_loc string, get_camera *gin.Context) {
 	res := Run_python_wave(rtsp_data, vid_stride, threshold, where_loc, get_camera)
+
+	//进程停止器
+	if Stop_flag_wave == true {
+		Stop_flag_wave = false
+		fmt.Println("已关停")
+		return
+	}
 	if res == true {
 		Judge_wave(rtsp_data, vid_stride, threshold, where_loc, get_camera)
 	}
@@ -143,6 +182,13 @@ func Judge_wave(rtsp_data string, vid_stride int, threshold float32, where_loc s
 
 func Judge_drown(rtsp_data string, vid_stride int, threshold float32, where_loc string, get_camera *gin.Context) {
 	res := Run_python_drown(rtsp_data, vid_stride, threshold, where_loc, get_camera)
+
+	//进程停止器
+	if Stop_flag_drown == true {
+		Stop_flag_drown = false
+		fmt.Println("已关停")
+		return
+	}
 	if res == true {
 		Judge_drown(rtsp_data, vid_stride, threshold, where_loc, get_camera)
 	}
@@ -150,6 +196,13 @@ func Judge_drown(rtsp_data string, vid_stride int, threshold float32, where_loc 
 
 func Judge_fall(rtsp_data string, vid_stride int, threshold float32, where_loc string, get_camera *gin.Context) {
 	res := Run_python_fall(rtsp_data, vid_stride, threshold, where_loc, get_camera)
+
+	//进程停止器
+	if Stop_flag_fall == true {
+		Stop_flag_fall = false
+		fmt.Println("已关停")
+		return
+	}
 	if res == true {
 		Judge_fall(rtsp_data, vid_stride, threshold, where_loc, get_camera)
 	}
@@ -157,9 +210,28 @@ func Judge_fall(rtsp_data string, vid_stride int, threshold float32, where_loc s
 
 func Judge_water(rtsp_data string, vid_stride int, threshold float32, where_loc string, get_camera *gin.Context) {
 	res := Run_python_water(rtsp_data, vid_stride, threshold, where_loc, get_camera)
+
+	//进程停止器
+	if Stop_flag_water == true {
+		Stop_flag_water = false
+		fmt.Println("已关停")
+		return
+	}
 	if res == true {
 		Judge_fall(rtsp_data, vid_stride, threshold, where_loc, get_camera)
 	}
 }
 
 //以上代码中，timeout 是一个 time.After() 函数返回的 chan time.Time 类型的 channel，当超过设定时间后会从这个 channel 中接收到一个时间值，表示已经超时了。在 for 循环中，我们通过 select 语句来监听 timeout 和 ticker 这两个 channel，如果 timeout 先接收到了值，那么就退出循环，停止调用 Run_python_wave() 函数。如果 ticker 先接收到了值，那么就调用 Run_python_wave() 函数，然后等待下一次循环。这样就可以实现在超过一定时间后停止函数的调用。
+
+// 停止器
+func Stop_Detect(c *gin.Context) {
+	Stop_flag_fire = true
+	Stop_flag_drown = true
+	Stop_flag_fall = true
+	Stop_flag_railing = true
+	Stop_flag_smoke = true
+	Stop_flag_wave = true
+	Stop_flag_water = true
+	c.String(200, "成功停止")
+}

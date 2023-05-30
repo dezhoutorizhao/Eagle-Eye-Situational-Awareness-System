@@ -73,6 +73,12 @@ func Get_Review(get_review *gin.Context) {
 		fmt.Println(user)
 		if user.Get_whether == false {
 			fmt.Println("不允许添加")
+			delete_sql := "DELETE FROM user_login.register_users WHERE number = ?"
+			println("number是", user.Get_school_id)
+			_, err = Db.Query(delete_sql, user.Get_school_id)
+			if err != nil {
+				fmt.Println(err)
+			}
 			return
 		}
 		if user.Get_role == "管理员" {

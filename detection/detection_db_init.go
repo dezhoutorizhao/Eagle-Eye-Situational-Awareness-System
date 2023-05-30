@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"os"
 )
 
 var (
@@ -13,7 +14,15 @@ var (
 )
 
 func init() {
-	Db, err = sql.Open("mysql", "root:20030729a@tcp(localhost:3306)/detection")
+	host := os.Getenv("MYSQL_HOST")
+	if host == "" {
+		panic("MYSQL_HOST environment variable not set")
+	}
+	port := os.Getenv("MYSQL_PORT")
+	if port == "" {
+		panic("MYSQL_PORT environment variable not set")
+	}
+	Db, err = sql.Open("mysql", "root:20030729a@tcp("+host+":"+port+")/detection")
 	if Db != nil {
 		fmt.Println("Db is not nil")
 	}

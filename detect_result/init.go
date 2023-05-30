@@ -3,21 +3,35 @@ package detect_result
 import (
 	"database/sql"
 	"fmt"
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"log"
+	"os"
+	"strconv"
+	"time"
 )
 
 var DB *gorm.DB
 var mysqlLogger logger.Interface
 
 func init() {
-	username := "root"      //账号
-	password := "20030729a" //密码
-	host := "127.0.0.1"     //数据库地址，可以是Ip或者域名
-	port := 3306            //数据库端口
-	Dbname := "detection"   //数据库名
-	timeout := "10s"        //连接超时，10秒
+	username := "root"              //账号
+	password := "20030729a"         //密码
+	host := os.Getenv("MYSQL_HOST") //数据库地址，可以是Ip或者域名
+	if host == "" {
+		panic("MYSQL_HOST environment variable not set")
+	}
+	portt := os.Getenv("MYSQL_PORT") //数据库地址，可以是Ip或者域名
+	if host == "" {
+		panic("MYSQL_PORT environment variable not set")
+	}
+	var port int
+	port, _ = strconv.Atoi(portt)
+	//port := 3306          //数据库端口
+	Dbname := "detection" //数据库名
+	timeout := "10s"      //连接超时，10秒
 
 	mysqlLogger = logger.Default.LogMode(logger.Info)
 
@@ -81,7 +95,15 @@ var (
 )
 
 func init() {
-	Db_sql, err = sql.Open("mysql", "root:20030729a@tcp(localhost:3306)/detection")
+	host := os.Getenv("MYSQL_HOST")
+	if host == "" {
+		panic("MYSQL_HOST environment variable not set")
+	}
+	port := os.Getenv("MYSQL_PORT")
+	if port == "" {
+		panic("MYSQL_HOST environment variable not set")
+	}
+	Db_sql, err = sql.Open("mysql", "root:20030729a@tcp("+host+":"+port+")/detection")
 	if Db_sql != nil {
 		fmt.Println("Db_sql is not nil")
 	}
@@ -93,5 +115,31 @@ func init() {
 		return
 	} else {
 		println("yes")
+	}
+}
+
+var opts *mqtt.ClientOptions
+var c mqtt.Client
+
+// 用于链接mqtt服务器
+func init() {
+	mqtt.DEBUG = log.New(os.Stdout, "", 0)
+	mqtt.ERROR = log.New(os.Stdout, "", 0)
+	//指定mqtt broker的地址和端口号，以及SetClientID()方法设定的客户端ID
+	opts = mqtt.NewClientOptions().AddBroker("tcp://47.95.198.41:1883").SetClientID("emqx_MDk2NT1")
+	opts.SetKeepAlive(100 * time.Second)
+	// 设置消息回调处理函数
+
+	// 设置默认的消息处理函数，接收一个mqtt.MessageHandler类型的参数，用于处理收到的消息
+	opts.SetDefaultPublishHandler(f)
+	opts.SetPingTimeout(10 * time.Second)
+
+	//进行链接
+	c = mqtt.NewClient(opts)
+	if token := c.Connect(); token.Wait() && token.Error() != nil {
+		panic(token.Error())
+		fmt.Println("emqx_mqtt服务器连接失败")
+	} else {
+		fmt.Println("emqx_mqtt服务器链接成功")
 	}
 }

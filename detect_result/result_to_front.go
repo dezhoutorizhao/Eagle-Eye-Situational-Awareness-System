@@ -5,7 +5,10 @@ import (
 	_ "database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	_ "strongwill.com/utils"
 )
+
+var Result_to_front_logs []Add_to_database
 
 func Result_to_front(to_front *gin.Context) {
 	////查询
@@ -61,5 +64,7 @@ func Result_to_front(to_front *gin.Context) {
 		}
 		results_to_front = append(results_to_front, result_to_front)
 	}
+	Result_to_front_logs = results_to_front
+
 	to_front.JSON(200, results_to_front)
 }

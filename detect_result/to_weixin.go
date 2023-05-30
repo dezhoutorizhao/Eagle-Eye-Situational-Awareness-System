@@ -48,6 +48,8 @@ func To_weixin(to_weixin *gin.Context) {
 		AppId: "wx0942daad1454b2fe",
 		//AppId:  NextOpenId,
 		Secret: "d1be5a7ac246c706a389dbf45656ea2c",
+		//AppId:  "wx24293b1938487ab1",
+		//Secret: "759dbbaa5e762f3b8a2d961ea267a131",
 	}
 	print("这是主函数中调用的结果 ", Input_NextOpenId)
 	temp_rate := fmt.Sprintf("%s", result.Rate)

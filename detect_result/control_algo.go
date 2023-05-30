@@ -2,6 +2,7 @@ package detect_result
 
 import (
 	"bufio"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,11 @@ import (
 )
 
 var text string
+var Detect_Photo string
+var Detect_Rate float64
+var Detect_Location string
+var Detect_type string
+var Detect_time sql.NullString
 
 func Run_python_fire(data string, vid_stride int, threshold float32, where_loc string, fire *gin.Context) bool {
 
@@ -21,8 +27,11 @@ func Run_python_fire(data string, vid_stride int, threshold float32, where_loc s
 		fmt.Println("获取当前工作目录出错：", err)
 		return false
 	}
-	pythonFile := filepath.Join(dir, "./../Files/Fire", "/dtest.py")
-	fmt.Println(pythonFile)
+	fmt.Println(dir, "这是当前路径")
+	//pythonFile := filepath.Join(dir, "./go/Files/Fire", "/dtest.py")
+	pythonFile := filepath.Join(dir, "./Files/Fire", "/dtest.py")
+	//pythonFile := filepath.Join()
+	fmt.Println("这是pythonFile位置", pythonFile)
 
 	//将参数转为指定格式
 	temp_vid_stride := strconv.Itoa(vid_stride)
@@ -79,6 +88,16 @@ func Run_python_fire(data string, vid_stride int, threshold float32, where_loc s
 		if err2 != nil {
 			fmt.Println("执行出现异常", err2)
 		}
+		//组合消息
+		Detect_Photo = insert_photo
+		Detect_Rate = insert_rate
+		Detect_Location = insert_location
+		Detect_time = this_time
+		Detect_type = "火灾"
+		Integration_Function(fire)
+
+		//发送消息
+		Release()
 
 		if err := scanner.Err(); err != nil {
 			panic(err)
@@ -95,7 +114,8 @@ func Run_python_smoke(data string, vid_stride int, threshold float32, where_loc 
 		fmt.Println("获取当前工作目录出错：", err)
 		return false
 	}
-	pythonFile := filepath.Join(dir, "./../Files/Smoking", "/dtest.py")
+	//pythonFile := filepath.Join(dir, "./go/Files/Smoking", "/dtest.py")
+	pythonFile := filepath.Join(dir, "./Files/Smoking", "/dtest.py")
 	fmt.Println(pythonFile)
 
 	//将参数转为指定格式
@@ -152,6 +172,15 @@ func Run_python_smoke(data string, vid_stride int, threshold float32, where_loc 
 		if err2 != nil {
 			fmt.Println("执行出现异常", err2)
 		}
+		Detect_Photo = insert_photo
+		Detect_Rate = insert_rate
+		Detect_Location = insert_location
+		Detect_time = this_time
+		Detect_type = "吸烟"
+		Integration_Function(fire)
+
+		//发送消息
+		Release()
 
 		if err := scanner.Err(); err != nil {
 			panic(err)
@@ -168,7 +197,8 @@ func Run_python_railing(data string, vid_stride int, threshold float32, where_lo
 		fmt.Println("获取当前工作目录出错：", err)
 		return false
 	}
-	pythonFile := filepath.Join(dir, "./../Files/Climb", "/dtest.py")
+	//pythonFile := filepath.Join(dir, "./go/Files/Climb", "/dtest.py")
+	pythonFile := filepath.Join(dir, "./Files/Climb", "/dtest.py")
 	fmt.Println(pythonFile)
 
 	//将参数转为指定格式
@@ -225,6 +255,15 @@ func Run_python_railing(data string, vid_stride int, threshold float32, where_lo
 		if err2 != nil {
 			fmt.Println("执行出现异常", err2)
 		}
+		Detect_Photo = insert_photo
+		Detect_Rate = insert_rate
+		Detect_Location = insert_location
+		Detect_time = this_time
+		Detect_type = "栏杆"
+		Integration_Function(fire)
+
+		//发送消息
+		Release()
 
 		if err := scanner.Err(); err != nil {
 			panic(err)
@@ -241,7 +280,8 @@ func Run_python_wave(data string, vid_stride int, threshold float32, where_loc s
 		fmt.Println("获取当前工作目录出错：", err)
 		return false
 	}
-	pythonFile := filepath.Join(dir, "./../Files/Wave", "/dtest.py")
+	//pythonFile := filepath.Join(dir, "./go/Files/Wave", "/dtest.py")
+	pythonFile := filepath.Join(dir, "./Files/Wave", "/dtest.py")
 	fmt.Println(pythonFile)
 
 	//将参数转为指定格式
@@ -298,6 +338,15 @@ func Run_python_wave(data string, vid_stride int, threshold float32, where_loc s
 		if err2 != nil {
 			fmt.Println("执行出现异常", err2)
 		}
+		Detect_Photo = insert_photo
+		Detect_Rate = insert_rate
+		Detect_Location = insert_location
+		Detect_time = this_time
+		Detect_type = "挥手"
+		Integration_Function(fire)
+
+		//发送消息
+		Release()
 
 		if err := scanner.Err(); err != nil {
 			panic(err)
@@ -314,7 +363,8 @@ func Run_python_drown(data string, vid_stride int, threshold float32, where_loc 
 		fmt.Println("获取当前工作目录出错：", err)
 		return false
 	}
-	pythonFile := filepath.Join(dir, "./../Files/Drawn", "/dtest.py")
+	//pythonFile := filepath.Join(dir, "./go/Files/Drawn", "/dtest.py")
+	pythonFile := filepath.Join(dir, "./Files/Drawn", "/dtest.py")
 	fmt.Println(pythonFile)
 
 	//将参数转为指定格式
@@ -371,6 +421,15 @@ func Run_python_drown(data string, vid_stride int, threshold float32, where_loc 
 		if err2 != nil {
 			fmt.Println("执行出现异常", err2)
 		}
+		Detect_Photo = insert_photo
+		Detect_Rate = insert_rate
+		Detect_Location = insert_location
+		Detect_time = this_time
+		Detect_type = "溺水"
+		Integration_Function(fire)
+
+		//发送消息
+		Release()
 
 		if err := scanner.Err(); err != nil {
 			panic(err)
@@ -387,7 +446,8 @@ func Run_python_fall(data string, vid_stride int, threshold float32, where_loc s
 		fmt.Println("获取当前工作目录出错：", err)
 		return false
 	}
-	pythonFile := filepath.Join(dir, "./../Files/Fall", "/dtest.py")
+	//pythonFile := filepath.Join(dir, "./go/Files/Fall", "/dtest.py")
+	pythonFile := filepath.Join(dir, "./Files/Fall", "/dtest.py")
 	fmt.Println(pythonFile)
 
 	//将参数转为指定格式
@@ -444,6 +504,15 @@ func Run_python_fall(data string, vid_stride int, threshold float32, where_loc s
 		if err2 != nil {
 			fmt.Println("执行出现异常", err2)
 		}
+		Detect_Photo = insert_photo
+		Detect_Rate = insert_rate
+		Detect_Location = insert_location
+		Detect_time = this_time
+		Detect_type = "摔倒"
+		Integration_Function(fire)
+
+		//发送消息
+		Release()
 
 		if err := scanner.Err(); err != nil {
 			panic(err)
@@ -460,7 +529,8 @@ func Run_python_water(data string, vid_stride int, threshold float32, where_loc 
 		fmt.Println("获取当前工作目录出错：", err)
 		return false
 	}
-	pythonFile := filepath.Join(dir, "./../Files/Water", "/dtest.py")
+	//pythonFile := filepath.Join(dir, "./go/Files/Water", "/dtest.py")
+	pythonFile := filepath.Join(dir, "./Files/Water", "/dtest.py")
 	fmt.Println(pythonFile)
 
 	//将参数转为指定格式
@@ -517,6 +587,15 @@ func Run_python_water(data string, vid_stride int, threshold float32, where_loc 
 		if err2 != nil {
 			fmt.Println("执行出现异常", err2)
 		}
+		Detect_Photo = insert_photo
+		Detect_Rate = insert_rate
+		Detect_Location = insert_location
+		Detect_time = this_time
+		Detect_type = "积水"
+		Integration_Function(fire)
+
+		//发送消息
+		Release()
 
 		if err := scanner.Err(); err != nil {
 			panic(err)
